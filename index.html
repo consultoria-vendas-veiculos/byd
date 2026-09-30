@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BYD | Consultor de Vendas</title>
+
+  <meta name="description"
+        content="Fale com um consultor de vendas BYD e conheça as opções disponíveis.">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e60012;
+      --red-dark: #b9000e;
+      --black: #050505;
+      --black-2: #101010;
+      --white: #ffffff;
+      --gray: #a8a8a8;
+      --line: rgba(255,255,255,.10);
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    /* FUNDO */
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background:
+        radial-gradient(
+          circle at 50% 45%,
+          rgba(230, 0, 18, .16),
+          transparent 35%
+        ),
+        linear-gradient(
+          135deg,
+          #050505 0%,
+          #111111 50%,
+          #030303 100%
+        );
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: rgba(230, 0, 18, .08);
+      filter: blur(100px);
+      top: -250px;
+      right: -180px;
+    }
+
+    .page::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .025);
+      filter: blur(90px);
+      bottom: -250px;
+      left: -200px;
+    }
+
+    /* GRID DECORATIVO */
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black 25%,
+        black 75%,
+        transparent
+      );
+    }
+
+    /* CONTAINER */
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(92%, 520px);
+      text-align: center;
+    }
+
+    /* LOGO */
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          145deg,
+          #1c1c1c,
+          #050505
+        );
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.5),
+        inset 0 0 30px rgba(255,255,255,.04);
+
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .logo span {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    /* TEXTO */
+
+    .eyebrow {
+      color: #aaa;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 7vw, 52px);
+      line-height: 1;
+      letter-spacing: -2px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    h1 strong {
+      color: var(--red);
+    }
+
+    .subtitle {
+      color: #b7b7b7;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 410px;
+      margin: 0 auto 35px;
+    }
+
+    /* CARD */
+
+    .loading-card {
+      background: rgba(18,18,18,.82);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.45);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      font-size: 13px;
+      color: #ddd;
+      margin-bottom: 18px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 15px var(--red);
+
+      animation: pulse 1.3s infinite;
+    }
+
+    /* BARRA */
+
+    .progress-wrapper {
+      width: 100%;
+      height: 7px;
+      background: #292929;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          #a9000d,
+          #e60012,
+          #ff3342
+        );
+
+      box-shadow:
+        0 0 15px rgba(230,0,18,.65);
+
+      transition: width .15s ease;
+    }
+
+    .percentage {
+      margin-top: 13px;
+      color: #888;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* INFO */
+
+    .consultant {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .whatsapp {
+      width: 38px;
+      height: 38px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+      background: #25D366;
+
+      font-size: 18px;
+      color: white;
+    }
+
+    .consultant-text {
+      text-align: left;
+    }
+
+    .consultant-text small {
+      display: block;
+      color: #777;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+
+    .consultant-text span {
+      color: #ddd;
+      font-size: 13px;
+    }
+
+    /* RODAPÉ */
+
+    .footer {
+      margin-top: 25px;
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* ANIMAÇÕES */
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.75);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 480px) {
+
+      .container {
+        width: 90%;
+      }
+
+      .logo {
+        width: 82px;
+        height: 82px;
+        margin-bottom: 23px;
+      }
+
+      .logo span {
+        font-size: 21px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .loading-card {
+        padding: 23px 18px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <div class="grid"></div>
+
+    <div class="container">
+
+      <div class="logo">
+        <span>BYD</span>
+      </div>
+
+      <div class="eyebrow">
+        Consultor de Vendas
+      </div>
+
+      <h1>
+        Seu próximo<br>
+        <strong>BYD</strong> começa aqui.
+      </h1>
+
+      <p class="subtitle">
+        Estamos preparando seu atendimento.
+        Você será direcionado para uma conversa
+        com nosso consultor de vendas.
+      </p>
+
+      <div class="loading-card">
+
+        <div class="status">
+          <span class="status-dot"></span>
+          <span id="statusText">
+            Transferindo para um consultor BYD...
+          </span>
+        </div>
+
+        <div class="progress-wrapper">
+          <div
+            class="progress"
+            id="progress">
+          </div>
+        </div>
+
+        <div
+          class="percentage"
+          id="percentage">
+          0%
+        </div>
+
+        <div class="consultant">
+
+          <div class="whatsapp">
+            ✓
+          </div>
+
+          <div class="consultant-text">
+            <small>Atendimento</small>
+            <span>Consultor de Vendas BYD</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="footer">
+        ATENDIMENTO ONLINE • BYD
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /*
+      ==========================================
+      CONFIGURAÇÃO
+      ==========================================
+    */
+
+    const telefone = "5511967224377";
+
+    const mensagem =
+      "Olá! Gostaria de falar com um consultor de vendas BYD.";
+
+
+    /*
+      ==========================================
+      ELEMENTOS
+      ==========================================
+    */
+
+    const progress =
+      document.getElementById("progress");
+
+    const percentage =
+      document.getElementById("percentage");
+
+    const statusText =
+      document.getElementById("statusText");
+
+
+    /*
+      ==========================================
+      CARREGAMENTO
+      ==========================================
+    */
+
+    let valor = 0;
+
+    const mensagens = [
+      "Conectando ao atendimento...",
+      "Localizando um consultor BYD...",
+      "Preparando seu atendimento...",
+      "Transferindo para o WhatsApp..."
+    ];
+
+    let etapaAtual = 0;
+
+
+    const intervalo = setInterval(() => {
+
+      valor += Math.random() * 4 + 1;
+
+      if (valor >= 100) {
+        valor = 100;
+      }
+
+      progress.style.width = valor + "%";
+
+      percentage.textContent =
+        Math.floor(valor) + "%";
+
+
+      /*
+        Troca o texto durante o carregamento
+      */
+
+      if (valor >= 25 && etapaAtual === 0) {
+        etapaAtual = 1;
+        statusText.textContent = mensagens[1];
+      }
+
+      if (valor >= 50 && etapaAtual === 1) {
+        etapaAtual = 2;
+        statusText.textContent = mensagens[2];
+      }
+
+      if (valor >= 75 && etapaAtual === 2) {
+        etapaAtual = 3;
+        statusText.textContent = mensagens[3];
+      }
+
+
+      /*
+        Finalização
+      */
+
+      if (valor >= 100) {
+
+        clearInterval(intervalo);
+
+        setTimeout(() => {
+
+          const url =
+            "https://wa.me/" +
+            telefone +
+            "?text=" +
+            encodeURIComponent(mensagem);
+
+          window.location.href = url;
+
+        }, 600);
+      }
+
+    }, 100);
+
+
+  </script>
+
+</body>
+</html>
